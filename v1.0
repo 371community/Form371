@@ -213,7 +213,8 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCqWTGoMg_JvKEwMGSOqzc4RcUAp3deMfQtTXgGIPt7in53LWblndQrDTC8GTow3rB/exec';
+    // 已更新為最新產生的 Web App 雲端網址
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx7t3bpLP5cBr9LpsXHRt5jHW-ES9IpYITAI2hYD_0wXPE51PKNTbzeuyrDCBNnJSY/exec';
 
     function switchTab(panelId) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
