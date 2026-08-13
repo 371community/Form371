@@ -3,237 +3,419 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>371社群 - 意見投訴與查詢</title>
+  <title>371社群 - 意見投訴與查詢系統</title>
   <style>
-    :root { --primary: #2563eb; --bg: #f8fafc; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    h1 { color: var(--primary); text-align: center; margin-top: 0; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
-    .tab-btn { flex: 1; padding: 10px; border: none; background: none; font-size: 16px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
-    .tab-btn.active { border-color: var(--primary); color: var(--primary); font-weight: bold; }
-    .panel { display: none; }
-    .panel.active { display: block; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; }
-    input, textarea, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
-    button.submit-btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
-    button.submit-btn:hover { opacity: 0.9; }
-    .card { background: #f1f5f9; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--primary); }
-    .admin-item { border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; margin-bottom: 12px; background: #fff; }
+    :root {
+      --primary-color: #0056b3;
+      --secondary-color: #f4f6f9;
+      --text-color: #333;
+      --border-color: #ccc;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #666;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"], textarea, select, input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button.submit-btn:hover {
+      background: #003d80;
+    }
+
+    .result-box {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 5px;
+      background: #e9ecef;
+      display: none;
+    }
+
+    .result-box.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .result-box.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* 管理員專用表格樣式 */
+    .report-card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #fafafa;
+    }
+
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .status-tag {
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      background: #ffc107;
+      color: #000;
+    }
+
+    .status-tag.已處理 {
+      background: #28a745;
+      color: #fff;
+    }
+
+    .reply-box {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #ccc;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>371社群</h1>
-  
+  <h1>371社群 意見投訴區</h1>
+
+  <!-- 頁籤分頁 -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('submit')">提交意見</button>
-    <button class="tab-btn" onclick="switchTab('query')">進度查詢</button>
-    <button class="tab-btn" onclick="switchTab('admin')">管理員登入</button>
+    <button class="tab-btn active" onclick="switchTab('submitTab')">提交意見</button>
+    <button class="tab-btn" onclick="switchTab('queryTab')">查詢進度</button>
+    <button class="tab-btn" onclick="switchTab('adminTab')">管理員登入</button>
   </div>
 
-  <!-- 1. 提交表單 -->
-  <div id="submitPanel" class="panel active">
-    <div class="form-group">
-      <label>你的姓名 / 暱稱（選填）</label>
-      <input type="text" id="subName" placeholder="例如：張先生">
-    </div>
-    <div class="form-group">
-      <label>聯絡方式 (Email / 電話 / Telegram)（選填）</label>
-      <input type="text" id="subContact" placeholder="方便日後主動聯絡">
-    </div>
-    <div class="form-group">
-      <label>意見 / 投訴內容 *</label>
-      <textarea id="subContent" rows="5" required placeholder="請詳細說明情況..."></textarea>
-    </div>
-    <button class="submit-btn" onclick="submitFeedback()">提交意見</button>
-    <div id="submitResult"></div>
-  </div>
-
-  <!-- 2. 查詢意見 -->
-  <div id="queryPanel" class="panel">
-    <div class="form-group">
-      <label>請輸入查詢編號 (格式: 360-XXXX)</label>
-      <input type="text" id="queryId" placeholder="例如: 360-1234">
-    </div>
-    <button class="submit-btn" onclick="queryTicket()">查詢</button>
-    <div id="queryResult"></div>
-  </div>
-
-  <!-- 3. 管理員區域 -->
-  <div id="adminPanel" class="panel">
-    <div id="adminAuth">
+  <!-- 1. 提交意見頁面 -->
+  <div id="submitTab" class="tab-content active">
+    <form id="submitForm">
       <div class="form-group">
-        <label>管理員密碼</label>
-        <input type="password" id="adminPwd">
+        <label for="name">姓名 / 稱呼（可留空，預設匿名）：</label>
+        <input type="text" id="name" placeholder="例如：陳先生">
       </div>
-      <button class="submit-btn" onclick="adminLogin()">登入管理區</button>
+      <div class="form-group">
+        <label for="contact">聯絡方式（電郵/電話，可選）：</label>
+        <input type="text" id="contact" placeholder="例如：example@mail.com">
+      </div>
+      <div class="form-group">
+        <label for="content">意見或投訴內容 *：</label>
+        <textarea id="content" required placeholder="請詳細說明您的意見或建議..."></textarea>
+      </div>
+      <button type="button" class="submit-btn" onclick="submitReport()">提交意見</button>
+    </form>
+    <div id="submitResult" class="result-box"></div>
+  </div>
+
+  <!-- 2. 查詢進度頁面 -->
+  <div id="queryTab" class="tab-content">
+    <div class="form-group">
+      <label for="queryIdInput">輸入查詢編號 (格式如 37-1234) *：</label>
+      <input type="text" id="queryIdInput" placeholder="37-XXXX">
+    </div>
+    <button type="button" class="submit-btn" onclick="queryReport()">查詢狀態</button>
+    <div id="queryResult" class="result-box"></div>
+  </div>
+
+  <!-- 3. 管理員登入與後台區 -->
+  <div id="adminTab" class="tab-content">
+    <div id="adminLoginForm">
+      <div class="form-group">
+        <label for="adminPassword">請輸入管理員密碼：</label>
+        <input type="password" id="adminPassword" placeholder="密碼">
+      </div>
+      <button type="button" class="submit-btn" onclick="adminLogin()">登入管理後台</button>
     </div>
 
-    <div id="adminContent" style="display:none;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3>意見收集區</h3>
-        <button onclick="loadAdminData()" style="padding: 6px 12px;">重新整理</button>
-      </div>
-      <div id="adminList"></div>
+    <div id="adminDashboard" style="display: none;">
+      <h3>意見收集管理區</h3>
+      <button onclick="fetchAdminReports()" style="margin-bottom: 15px; padding: 5px 10px; cursor: pointer;">重新整理列表</button>
+      <div id="adminReportsList"></div>
     </div>
+    <div id="adminResult" class="result-box"></div>
   </div>
 </div>
 
 <script>
-  // 已自動代入你提供的 Apps Script Deployment ID 網址
-  const API_URL = "https://script.google.com/macros/s/AKfycbxx7t3bpLP5cBr9LpsXHRt5jHW-ES9IpYITAI2hYD_0wXPE51PKNTbzeuyrDCBNnJSY/exec";
+  // 你的 Google Apps Script API 部署網址
+  const API_URL = "https://script.google.com/macros/s/AKfycby4t76FXk5na_JNQ8dbUPscOIm--6fNzVIfs-dwF8J8Ys58dNHLonsjKVaN9UWuT5uF/exec";
+  let currentAdminPassword = "";
 
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  // 切換頁籤
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     
-    if (tab === 'submit') {
-      document.querySelectorAll('.tab-btn')[0].classList.add('active');
-      document.getElementById('submitPanel').classList.add('active');
-    } else if (tab === 'query') {
-      document.querySelectorAll('.tab-btn')[1].classList.add('active');
-      document.getElementById('queryPanel').classList.add('active');
-    } else {
-      document.querySelectorAll('.tab-btn')[2].classList.add('active');
-      document.getElementById('adminPanel').classList.add('active');
-    }
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
   }
 
-  // 提交意見
-  async function submitFeedback() {
-    const content = document.getElementById('subContent').value.trim();
-    if (!content) return alert("請輸入意見內容");
+  // 1. 提交意見
+  async function submitReport() {
+    const name = document.getElementById('name').value;
+    const contact = document.getElementById('contact').value;
+    const content = document.getElementById('content').value;
+    const resultDiv = document.getElementById('submitResult');
 
-    const btn = event.target;
-    btn.disabled = true;
-    btn.innerText = "提交中...";
+    if (!content) {
+      alert("請填寫意見內容！");
+      return;
+    }
+
+    resultDiv.className = "result-box";
+    resultDiv.style.display = "block";
+    resultDiv.innerText = "提交中，請稍候...";
 
     try {
-      const res = await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({
-          action: "submit",
-          name: document.getElementById('subName').value,
-          contact: document.getElementById('subContact').value,
-          content: content
-        })
+        body: JSON.stringify({ action: "submit", name, contact, content })
       });
-      const data = await res.json();
+      const data = await response.json();
+
       if (data.success) {
-        document.getElementById('submitResult').innerHTML = `
-          <div class="card" style="border-color: #22c55e;">
-            <p style="margin:0; font-weight:bold; color:#15803d;">提交成功！</p>
-            <p style="margin:8px 0 0 0;">請記下你的查詢編號：<span style="font-size: 20px; color: #2563eb;">${data.ticketId}</span></p>
-          </div>`;
-        document.getElementById('subContent').value = "";
+        resultDiv.className = "result-box success";
+        resultDiv.innerHTML = `<strong>提交成功！</strong><br>您的查詢編號為：<strong style="font-size: 18px; color: #0056b3;">${data.queryId}</strong><br>請妥善保存此編號，以便日後查詢處理進度。`;
+        document.getElementById('submitForm').reset();
+      } else {
+        resultDiv.className = "result-box error";
+        resultDiv.innerText = "提交失敗：" + data.message;
       }
     } catch (err) {
-      alert("提交失敗，請檢查 Google Apps Script 權限設定（需設定為 Anyone 所有人存取）");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "提交意見";
+      resultDiv.className = "result-box error";
+      resultDiv.innerText = "系統錯誤，請稍後再試。";
     }
   }
 
-  // 使用者查詢
-  async function queryTicket() {
-    const ticketId = document.getElementById('queryId').value.trim();
-    if (!ticketId) return alert("請輸入編號");
-
+  // 2. 查詢進度
+  async function queryReport() {
+    const queryId = document.getElementById('queryIdInput').value.trim();
     const resultDiv = document.getElementById('queryResult');
-    resultDiv.innerHTML = "查詢中...";
+
+    if (!queryId) {
+      alert("請輸入查詢編號！");
+      return;
+    }
+
+    resultDiv.className = "result-box";
+    resultDiv.style.display = "block";
+    resultDiv.innerText = "查詢中...";
 
     try {
-      const res = await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({ action: "query", ticketId: ticketId })
+        body: JSON.stringify({ action: "query", queryId })
       });
-      const resData = await res.json();
-      
-      if (resData.success) {
-        const item = resData.data;
+      const data = await response.json();
+
+      if (data.success) {
+        const item = data.data;
+        resultDiv.className = "result-box success";
         resultDiv.innerHTML = `
-          <div class="card">
-            <p><strong>單號：</strong> ${item.ticketId} (${item.status})</p>
-            <p><strong>提交時間：</strong> ${item.timestamp}</p>
-            <p><strong>你的意見：</strong><br>${item.content}</p>
-            <hr>
-            <p><strong>371社群回覆：</strong><br><span style="color:#2563eb;">${item.reply}</span></p>
-          </div>`;
+          <p><strong>查詢編號：</strong> ${item.queryId}</p>
+          <p><strong>提交時間：</strong> ${item.timestamp}</p>
+          <p><strong>意見內容：</strong> ${item.content}</p>
+          <p><strong>處理狀態：</strong> <span class="status-tag ${item.status}">${item.status}</span></p>
+          <p><strong>管理員回覆：</strong> ${item.reply || "（暫未有回覆）"}</p>
+        `;
       } else {
-        resultDiv.innerHTML = `<p style="color:red; margin-top:12px;">${resData.message}</p>`;
+        resultDiv.className = "result-box error";
+        resultDiv.innerText = data.message;
       }
     } catch (err) {
-      resultDiv.innerHTML = "查詢失敗";
+      resultDiv.className = "result-box error";
+      resultDiv.innerText = "查詢失敗，請檢查網路。";
     }
   }
 
-  // 管理員登入與讀取數據
-  let currentPwd = "";
+  // 3. 管理員登入
   async function adminLogin() {
-    currentPwd = document.getElementById('adminPwd').value;
-    await loadAdminData();
+    const password = document.getElementById('adminPassword').value;
+    if (!password) {
+      alert("請輸入密碼！");
+      return;
+    }
+
+    currentAdminPassword = password;
+    fetchAdminReports();
   }
 
-  async function loadAdminData() {
-    const listDiv = document.getElementById('adminList');
-    listDiv.innerHTML = "載入中...";
+  // 獲取管理員列表數據
+  async function fetchAdminReports() {
+    const resultDiv = document.getElementById('adminResult');
+    resultDiv.className = "result-box";
+    resultDiv.style.display = "block";
+    resultDiv.innerText = "載入中...";
 
     try {
-      const res = await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: "POST",
-        body: JSON.stringify({ action: "admin_get", password: currentPwd })
+        body: JSON.stringify({ action: "adminFetch", password: currentAdminPassword })
       });
-      const resData = await res.json();
+      const data = await response.json();
 
-      if (resData.success) {
-        document.getElementById('adminAuth').style.display = "none";
-        document.getElementById('adminContent').style.display = "block";
-        
-        listDiv.innerHTML = resData.data.map(item => `
-          <div class="admin-item">
-            <p><strong>[${item.ticketId}]</strong> - ${item.timestamp} (${item.status})</p>
-            <p><strong>發送人：</strong> ${item.name} | <strong>聯絡：</strong> ${item.contact}</p>
-            <p><strong>內容：</strong> ${item.content}</p>
-            <div style="margin-top:8px;">
-              <textarea id="reply_${item.ticketId}" placeholder="輸入回覆內容...">${item.reply || ''}</textarea>
-              <button onclick="replyTicket('${item.ticketId}')" style="margin-top:6px; padding:6px 12px; background:#10b981; color:white; border:none; border-radius:4px; cursor:pointer;">更新回覆</button>
+      if (data.success) {
+        resultDiv.style.display = "none";
+        document.getElementById('adminLoginForm').style.display = "none";
+        document.getElementById('adminDashboard').style.display = "block";
+
+        const listDiv = document.getElementById('adminReportsList');
+        listDiv.innerHTML = "";
+
+        if (data.reports.length === 0) {
+          listDiv.innerHTML = "<p>目前沒有任何意見記錄。</p>";
+          return;
+        }
+
+        data.reports.reverse().forEach(report => {
+          const card = document.createElement('div');
+          card.className = "report-card";
+          card.innerHTML = `
+            <div class="report-header">
+              <span>編號: ${report.queryId}</span>
+              <span class="status-tag ${report.status}">${report.status}</span>
             </div>
-          </div>
-        `).reverse().join('');
+            <p><strong>提交時間：</strong> ${report.timestamp}</p>
+            <p><strong>提交者：</strong> ${report.name} (${report.contact})</p>
+            <p><strong>內容：</strong> ${report.content}</p>
+            <div class="reply-box">
+              <label><strong>更新狀態與回覆：</strong></label>
+              <select id="status-${report.row}" style="margin-bottom: 8px;">
+                <option value="處理中" ${report.status === '處理中' ? 'selected' : ''}>處理中</option>
+                <option value="已處理" ${report.status === '已處理' ? 'selected' : ''}>已處理</option>
+              </select>
+              <textarea id="reply-${report.row}" placeholder="輸入回覆內容...">${report.reply}</textarea>
+              <button onclick="updateReply(${report.row})" style="margin-top: 8px; padding: 8px 15px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 4px;">更新儲存</button>
+            </div>
+          `;
+          listDiv.appendChild(card);
+        });
+
       } else {
-        alert(resData.message);
+        resultDiv.className = "result-box error";
+        resultDiv.innerText = data.message;
       }
     } catch (err) {
-      alert("載入失敗");
+      resultDiv.className = "result-box error";
+      resultDiv.innerText = "網路錯誤或驗證失敗。";
     }
   }
 
-  // 管理員發放意見/回覆
-  async function replyTicket(ticketId) {
-    const replyText = document.getElementById(`reply_${ticketId}`).value;
+  // 管理員更新狀態與回覆
+  async function updateReply(row) {
+    const status = document.getElementById(`status-${row}`).value;
+    const reply = document.getElementById(`reply-${row}`).value;
 
     try {
-      const res = await fetch(API_URL, {
+      const response = await fetch(API_URL, {
         method: "POST",
         body: JSON.stringify({
-          action: "admin_reply",
-          password: currentPwd,
-          ticketId: ticketId,
-          reply: replyText,
-          status: "已回覆"
+          action: "adminReply",
+          password: currentAdminPassword,
+          row: row,
+          status: status,
+          reply: reply
         })
       });
-      const resData = await res.json();
-      if (resData.success) {
-        alert("回覆更新成功！");
-        loadAdminData();
+      const data = await response.json();
+
+      if (data.success) {
+        alert("更新成功！");
+        fetchAdminReports();
+      } else {
+        alert("更新失敗：" + data.message);
       }
     } catch (err) {
-      alert("更新失敗");
+      alert("更新時發生錯誤。");
     }
   }
 </script>
