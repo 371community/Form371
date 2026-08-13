@@ -1,360 +1,242 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>371社群 - 雲端意見投訴管理系統</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #334155;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background-color: #e2e8f0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .panel {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            display: none;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        input[type="text"], input[type="password"], textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        button.btn-submit {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        button.btn-submit:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        button:disabled {
-            background-color: #cbd5e1 !important;
-            cursor: not-allowed;
-        }
-
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            color: #166534;
-            border-radius: 6px;
-            display: none;
-        }
-
-        .record-card {
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            background-color: #fafafa;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .status-pending { background-color: #fef3c7; color: #92400e; }
-        .status-replied { background-color: #dcfce7; color: #166534; }
-
-        .admin-reply-box {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            border-radius: 0 4px 4px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>371社群 - 意見投訴與查詢</title>
+  <style>
+    :root { --primary: #2563eb; --bg: #f8fafc; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    h1 { color: var(--primary); text-align: center; margin-top: 0; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
+    .tab-btn { flex: 1; padding: 10px; border: none; background: none; font-size: 16px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .tab-btn.active { border-color: var(--primary); color: var(--primary); font-weight: bold; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    input, textarea, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+    button.submit-btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+    button.submit-btn:hover { opacity: 0.9; }
+    .card { background: #f1f5f9; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--primary); }
+    .admin-item { border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; margin-bottom: 12px; background: #fff; }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>371社群</h1>
-        <p>🌐 雲端意見投訴與管理系統</p>
-    </header>
+  <h1>371社群</h1>
+  
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('submit')">提交意見</button>
+    <button class="tab-btn" onclick="switchTab('query')">進度查詢</button>
+    <button class="tab-btn" onclick="switchTab('admin')">管理員登入</button>
+  </div>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('submit-panel')">提交意見</button>
-        <button class="tab-btn" onclick="switchTab('search-panel')">查詢編號</button>
-        <button class="tab-btn" onclick="switchTab('admin-panel')">管理員登入</button>
+  <!-- 1. 提交表單 -->
+  <div id="submitPanel" class="panel active">
+    <div class="form-group">
+      <label>你的姓名 / 暱稱（選填）</label>
+      <input type="text" id="subName" placeholder="例如：張先生">
+    </div>
+    <div class="form-group">
+      <label>聯絡方式 (Email / 電話 / Telegram)（選填）</label>
+      <input type="text" id="subContact" placeholder="方便日後主動聯絡">
+    </div>
+    <div class="form-group">
+      <label>意見 / 投訴內容 *</label>
+      <textarea id="subContent" rows="5" required placeholder="請詳細說明情況..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitFeedback()">提交意見</button>
+    <div id="submitResult"></div>
+  </div>
+
+  <!-- 2. 查詢意見 -->
+  <div id="queryPanel" class="panel">
+    <div class="form-group">
+      <label>請輸入查詢編號 (格式: 360-XXXX)</label>
+      <input type="text" id="queryId" placeholder="例如: 360-1234">
+    </div>
+    <button class="submit-btn" onclick="queryTicket()">查詢</button>
+    <div id="queryResult"></div>
+  </div>
+
+  <!-- 3. 管理員區域 -->
+  <div id="adminPanel" class="panel">
+    <div id="adminAuth">
+      <div class="form-group">
+        <label>管理員密碼</label>
+        <input type="password" id="adminPwd">
+      </div>
+      <button class="submit-btn" onclick="adminLogin()">登入管理區</button>
     </div>
 
-    <!-- 1. 提交意見 -->
-    <div id="submit-panel" class="panel active">
-        <h2>📝 填寫意見投訴</h2>
-        <form id="complaintForm" onsubmit="submitForm(event)">
-            <div class="form-group">
-                <label for="userName">您的姓名 / 暱稱（可匿名）</label>
-                <input type="text" id="userName" placeholder="填寫匿名則代表不公開姓名">
-            </div>
-            <div class="form-group">
-                <label for="content">投訴或意見內容 *</label>
-                <textarea id="content" rows="5" required placeholder="請詳細說明您的意見..."></textarea>
-            </div>
-            <button type="submit" id="submitBtn" class="btn-submit">提交表單</button>
-        </form>
-        <div id="submitResult" class="result-box"></div>
+    <div id="adminContent" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3>意見收集區</h3>
+        <button onclick="loadAdminData()" style="padding: 6px 12px;">重新整理</button>
+      </div>
+      <div id="adminList"></div>
     </div>
-
-    <!-- 2. 查詢編號 -->
-    <div id="search-panel" class="panel">
-        <h2>🔍 查詢意見狀態</h2>
-        <div class="form-group">
-            <label for="searchId">請輸入您的查詢編號 *</label>
-            <input type="text" id="searchId" placeholder="例如: 371-4829">
-        </div>
-        <button class="btn-submit" onclick="searchComplaint()">開始查詢</button>
-        <div id="searchResult" style="margin-top: 20px;"></div>
-    </div>
-
-    <!-- 3. 管理員登入 -->
-    <div id="admin-panel" class="panel">
-        <h2>🔐 管理員意見收集區</h2>
-        
-        <div id="adminLoginForm">
-            <div class="form-group">
-                <label for="adminPwd">請輸入管理員密碼 *</label>
-                <input type="password" id="adminPwd" placeholder="請輸入密碼">
-            </div>
-            <button class="btn-submit" onclick="loginAdmin()">登入系統</button>
-        </div>
-
-        <div id="adminContent" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>📥 所有雲端意見清單</h3>
-                <button onclick="logoutAdmin()" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">登出</button>
-            </div>
-            <div id="adminList"></div>
-        </div>
-    </div>
+  </div>
 </div>
 
 <script>
-    // 已更新為最新產生的 Web App 雲端網址
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx7t3bpLP5cBr9LpsXHRt5jHW-ES9IpYITAI2hYD_0wXPE51PKNTbzeuyrDCBNnJSY/exec';
+  // 已自動代入你提供的 Apps Script Deployment ID 網址
+  const API_URL = "https://script.google.com/macros/s/AKfycbxx7t3bpLP5cBr9LpsXHRt5jHW-ES9IpYITAI2hYD_0wXPE51PKNTbzeuyrDCBNnJSY/exec";
 
-    function switchTab(panelId) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    
+    if (tab === 'submit') {
+      document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      document.getElementById('submitPanel').classList.add('active');
+    } else if (tab === 'query') {
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      document.getElementById('queryPanel').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab-btn')[2].classList.add('active');
+      document.getElementById('adminPanel').classList.add('active');
+    }
+  }
+
+  // 提交意見
+  async function submitFeedback() {
+    const content = document.getElementById('subContent').value.trim();
+    if (!content) return alert("請輸入意見內容");
+
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerText = "提交中...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "submit",
+          name: document.getElementById('subName').value,
+          contact: document.getElementById('subContact').value,
+          content: content
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('submitResult').innerHTML = `
+          <div class="card" style="border-color: #22c55e;">
+            <p style="margin:0; font-weight:bold; color:#15803d;">提交成功！</p>
+            <p style="margin:8px 0 0 0;">請記下你的查詢編號：<span style="font-size: 20px; color: #2563eb;">${data.ticketId}</span></p>
+          </div>`;
+        document.getElementById('subContent').value = "";
+      }
+    } catch (err) {
+      alert("提交失敗，請檢查 Google Apps Script 權限設定（需設定為 Anyone 所有人存取）");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "提交意見";
+    }
+  }
+
+  // 使用者查詢
+  async function queryTicket() {
+    const ticketId = document.getElementById('queryId').value.trim();
+    if (!ticketId) return alert("請輸入編號");
+
+    const resultDiv = document.getElementById('queryResult');
+    resultDiv.innerHTML = "查詢中...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "query", ticketId: ticketId })
+      });
+      const resData = await res.json();
+      
+      if (resData.success) {
+        const item = resData.data;
+        resultDiv.innerHTML = `
+          <div class="card">
+            <p><strong>單號：</strong> ${item.ticketId} (${item.status})</p>
+            <p><strong>提交時間：</strong> ${item.timestamp}</p>
+            <p><strong>你的意見：</strong><br>${item.content}</p>
+            <hr>
+            <p><strong>371社群回覆：</strong><br><span style="color:#2563eb;">${item.reply}</span></p>
+          </div>`;
+      } else {
+        resultDiv.innerHTML = `<p style="color:red; margin-top:12px;">${resData.message}</p>`;
+      }
+    } catch (err) {
+      resultDiv.innerHTML = "查詢失敗";
+    }
+  }
+
+  // 管理員登入與讀取數據
+  let currentPwd = "";
+  async function adminLogin() {
+    currentPwd = document.getElementById('adminPwd').value;
+    await loadAdminData();
+  }
+
+  async function loadAdminData() {
+    const listDiv = document.getElementById('adminList');
+    listDiv.innerHTML = "載入中...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "admin_get", password: currentPwd })
+      });
+      const resData = await res.json();
+
+      if (resData.success) {
+        document.getElementById('adminAuth').style.display = "none";
+        document.getElementById('adminContent').style.display = "block";
         
-        document.getElementById(panelId).classList.add('active');
-        if(event) event.currentTarget.classList.add('active');
-
-        if (panelId === 'admin-panel' && document.getElementById('adminContent').style.display === 'block') {
-            loadAdminList();
-        }
+        listDiv.innerHTML = resData.data.map(item => `
+          <div class="admin-item">
+            <p><strong>[${item.ticketId}]</strong> - ${item.timestamp} (${item.status})</p>
+            <p><strong>發送人：</strong> ${item.name} | <strong>聯絡：</strong> ${item.contact}</p>
+            <p><strong>內容：</strong> ${item.content}</p>
+            <div style="margin-top:8px;">
+              <textarea id="reply_${item.ticketId}" placeholder="輸入回覆內容...">${item.reply || ''}</textarea>
+              <button onclick="replyTicket('${item.ticketId}')" style="margin-top:6px; padding:6px 12px; background:#10b981; color:white; border:none; border-radius:4px; cursor:pointer;">更新回覆</button>
+            </div>
+          </div>
+        `).reverse().join('');
+      } else {
+        alert(resData.message);
+      }
+    } catch (err) {
+      alert("載入失敗");
     }
+  }
 
-    function submitForm(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerText = '正在同步至雲端...請勿關閉網頁';
+  // 管理員發放意見/回覆
+  async function replyTicket(ticketId) {
+    const replyText = document.getElementById(`reply_${ticketId}`).value;
 
-        const name = document.getElementById('userName').value.trim() || '匿名用戶';
-        const content = document.getElementById('content').value.trim();
-        const date = new Date().toLocaleString();
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'submit', name: name, content: content, date: date })
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "admin_reply",
+          password: currentPwd,
+          ticketId: ticketId,
+          reply: replyText,
+          status: "已回覆"
         })
-        .then(res => res.json())
-        .then(resData => {
-            const resultBox = document.getElementById('submitResult');
-            resultBox.style.display = 'block';
-            resultBox.innerHTML = `
-                <strong>🎉 提交成功！資料已即時同步到雲端。</strong><br>
-                您的雲端查詢序號為：<strong style="color:#2563eb; font-size:20px;">${resData.id}</strong><br>
-                所有裝置均可同步使用此編號進行查詢。
-            `;
-            document.getElementById('complaintForm').reset();
-            submitBtn.disabled = false;
-            submitBtn.innerText = '提交表單';
-        })
-        .catch(err => {
-            const resultBox = document.getElementById('submitResult');
-            resultBox.style.display = 'block';
-            resultBox.innerHTML = `
-                <strong>🎉 提交成功！資料已同步至雲端試算表。</strong><br>
-                請切換到「查詢編號」或「管理員登入」分頁，即可直接跨裝置查看最新提交的意見內容！
-            `;
-            document.getElementById('complaintForm').reset();
-            submitBtn.disabled = false;
-            submitBtn.innerText = '提交表單';
-        });
+      });
+      const resData = await res.json();
+      if (resData.success) {
+        alert("回覆更新成功！");
+        loadAdminData();
+      }
+    } catch (err) {
+      alert("更新失敗");
     }
-
-    function searchComplaint() {
-        const searchId = document.getElementById('searchId').value.trim().toLowerCase();
-        const resultDiv = document.getElementById('searchResult');
-        if (!searchId) { resultDiv.innerHTML = '<p style="color:red;">請輸入編號！</p>'; return; }
-
-        resultDiv.innerHTML = '<p>🔍 雲端資料庫檢索中...</p>';
-
-        fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-            const found = data.find(c => c.id.toLowerCase() === searchId);
-            if (found) {
-                const statusText = found.status === 'pending' ? '處理中' : '管理員已回覆';
-                const statusClass = found.status === 'pending' ? 'status-pending' : 'status-replied';
-                let html = `
-                    <div class="record-card">
-                        <p><strong>編號：</strong> ${found.id}</p>
-                        <p><strong>提交時間：</strong> ${found.date}</p>
-                        <p><strong>投訴人：</strong> ${found.name}</p>
-                        <p><strong>內容：</strong> ${found.content}</p>
-                        <p><strong>狀態：</strong> <span class="status-badge ${statusClass}">${statusText}</span></p>
-                `;
-                if (found.reply) {
-                    html += `<div class="admin-reply-box"><strong>💬 管理員回覆：</strong><p style="margin: 5px 0 0 0;">${found.reply}</p></div>`;
-                } else {
-                    html += `<div class="admin-reply-box" style="border-left-color: #cbd5e1; background-color: #f8fafc;"><p style="margin: 0; color: #64748b;">⏳ 管理員尚未回覆，請耐心等候。</p></div>`;
-                }
-                html += `</div>`;
-                resultDiv.innerHTML = html;
-            } else {
-                resultDiv.innerHTML = '<p style="color:red;">❌ 找不到該編號，請確認輸入是否正確（例如：371-4829）。</p>';
-            }
-        });
-    }
-
-    function loginAdmin() {
-        if (document.getElementById('adminPwd').value === '3718122200') {
-            document.getElementById('adminLoginForm').style.display = 'none';
-            document.getElementById('adminContent').style.display = 'block';
-            loadAdminList();
-        } else { alert('密碼錯誤！'); }
-    }
-
-    function logoutAdmin() {
-        document.getElementById('adminPwd').value = '';
-        document.getElementById('adminLoginForm').style.display = 'block';
-        document.getElementById('adminContent').style.display = 'none';
-    }
-
-    function loadAdminList() {
-        const listDiv = document.getElementById('adminList');
-        listDiv.innerHTML = '<p>📥 正在從 Google 試算表同步資料...</p>';
-
-        fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-            if (data.length === 0) { listDiv.innerHTML = '<p style="color:#64748b;">目前沒有任何意見投稿。</p>'; return; }
-            let html = '';
-            data.reverse().forEach(c => {
-                const statusText = c.status === 'pending' ? '未回覆' : '已回覆';
-                const statusClass = c.status === 'pending' ? 'status-pending' : 'status-replied';
-                html += `
-                    <div class="record-card">
-                        <p><strong>編號：</strong> ${c.id} <span class="status-badge ${statusClass}">${statusText}</span></p>
-                        <p><strong>時間：</strong> ${c.date} | <strong>提交者：</strong> ${c.name}</p>
-                        <p><strong>內容：</strong> ${c.content}</p>
-                        <div style="margin-top:10px;">
-                            <input type="text" id="reply-input-${c.id}" value="${c.reply}" placeholder="輸入回覆內容...">
-                            <button onclick="submitReply('${c.id}')" style="background:#10b981; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:13px; margin-top:5px;">發布回覆</button>
-                        </div>
-                    </div>
-                `;
-            });
-            listDiv.innerHTML = html;
-        });
-    }
-
-    function submitReply(id) {
-        const replyText = document.getElementById(`reply-input-${id}`).value.trim();
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'reply', id: id, reply: replyText })
-        }).then(() => {
-            alert('雲端回覆成功！所有裝置已同步。');
-            loadAdminList();
-        });
-    }
+  }
 </script>
+
 </body>
 </html>
