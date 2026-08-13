@@ -126,7 +126,6 @@
       border: 1px solid #f5c6cb;
     }
 
-    /* 管理員專用表格樣式 */
     .report-card {
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -226,11 +225,9 @@
 </div>
 
 <script>
-  // 你的 Google Apps Script API 部署網址
   const API_URL = "https://script.google.com/macros/s/AKfycby4t76FXk5na_JNQ8dbUPscOIm--6fNzVIfs-dwF8J8Ys58dNHLonsjKVaN9UWuT5uF/exec";
   let currentAdminPassword = "";
 
-  // 切換頁籤
   function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -329,7 +326,6 @@
     fetchAdminReports();
   }
 
-  // 獲取管理員列表數據
   async function fetchAdminReports() {
     const resultDiv = document.getElementById('adminResult');
     resultDiv.className = "result-box";
@@ -390,7 +386,6 @@
     }
   }
 
-  // 管理員更新狀態與回覆
   async function updateReply(row) {
     const status = document.getElementById(`status-${row}`).value;
     const reply = document.getElementById(`reply-${row}`).value;
